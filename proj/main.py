@@ -89,9 +89,8 @@ def dht_measure(verbose = False):
     print("Umidade: ")
     print(hum)
 
-def light_read():
+## def light_read():
   ## TODO
-
 
 def main():
   boot_animation()
