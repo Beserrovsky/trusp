@@ -1,3 +1,11 @@
+/*
+
+    WARNING: Não consegui fazer funcionar e rapidamente migrei para o micropython,
+    não deve ser díficil de arrumar, mas real não precisa pq no main.py já se testa.
+
+*/
+
+
 #define R_TOP 34
 #define R_MID 35
 #define R_BOT 32
