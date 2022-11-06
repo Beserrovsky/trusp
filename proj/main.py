@@ -1,6 +1,4 @@
-import machine
-import time
-import dht
+import mqtt
 
 ## ! Constraints ! ####################
 
@@ -23,6 +21,7 @@ G_MID = machine.Pin(22, machine.Pin.OUT)
 G_BOT = machine.Pin(21, machine.Pin.OUT)
 
 sensor = dht.DHT11(machine.Pin(15))
+ldr = machine.ADC(machine.Pin(34))
 
 ########################################
 
@@ -33,6 +32,7 @@ g = [G_TOP, G_MID, G_BOT]
 
 itn = 3
 
+lig = 0
 temp = 0
 hum = 0
 
@@ -45,7 +45,6 @@ def chg(arr, state, delay = None):
     arr[i if itn == 3 else i + 1].value(state)
     if(delay != None):
       time.sleep(delay)
-
 
 def chg_all(state, delay = None):
   chg(r, state, delay)
@@ -63,11 +62,8 @@ def boot_animation():
   time.sleep(10 * FAST_SLEEP)
   chg_all(False)
 
-
 ## FIXME: Callback timing inconsistent
 def tf_light():
-  global itn
-  itn = DEFAULT_ITN
   chg(r, True)
   time.sleep(TF_SLEEP)
   chg(r, False)
@@ -89,14 +85,38 @@ def dht_measure(verbose = False):
     print("Umidade: ")
     print(hum)
 
-## def light_read():
-  ## TODO
+def light_read(verbose = False):
+  global lig
+  lig = ldr.read_u16() 
+  if (verbose):
+    print("Luminosidade: ")
+    print(lig)
+
+def update_itn():
+  global itn, lig
+  if (lig < 10000):
+    itn = 1
+  elif (lig < 50000):
+    itn = 2
+  else:
+    itn = 3
+  
+  chg_all(False)
+
+def reset_itn():
+  global itn
+  itn = DEFAULT_ITN
 
 def main():
   boot_animation()
   dht_measure(True)
+  light_read(True)
+  reset_itn()
   while True:
     tf_light()
     dht_measure()
+    light_read(True)
+    update_itn()
+    tick() # MQTT UPDATES
 
 main()
