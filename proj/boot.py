@@ -1,18 +1,22 @@
-import time
-from umqttsimple import MQTTClient
-import ubinascii
-import machine
-import micropython
-import network
-import esp
-esp.osdebug(None)
-import gc
-gc.collect()
-import dht
+# Default libs
+import time, ubinascii, machine, micropython, network, esp, gc, dht
 
-ssid = ''
-password = ''
-mqtt_server = '18.197.248.71' # HiveMQ Broker
+# Mqtt lib
+from umqttsimple import MQTTClient
+
+# Proj libs
+from animations import error_animation
+
+## CONSTRAINTS
+
+CONN_TIMEOUT = 5
+
+esp.osdebug(None)
+gc.collect()
+
+ssid = 'Beserrinha AP'
+password = 'SlowDancing123'
+mqtt_server = '18.197.114.189' # HiveMQ Broker
 client_id = ubinascii.hexlify(machine.unique_id())
 
 topic_animation_sub = b'animation_TRUSP_sub'
@@ -26,7 +30,12 @@ station = network.WLAN(network.STA_IF)
 station.active(True)
 station.connect(ssid, password)
 
+ini_time = time.time()
+
 while station.isconnected() == False:
+  if(time.time() - ini_time >= CONN_TIMEOUT) :
+    error_animation("Timeout on network connection, check credentials")
+    time.sleep(1)
   pass
 
 print('Connection successful')
