@@ -1,5 +1,5 @@
 # Default libs
-import time, ubinascii, machine, micropython, network, esp, gc, dht
+import time, machine, micropython, network, esp, gc, dht
 
 # Mqtt lib
 from umqttsimple import MQTTClient
@@ -9,21 +9,13 @@ from animations import error_animation
 
 ## CONSTRAINTS
 
-CONN_TIMEOUT = 5
+CONN_TIMEOUT = 10
 
 esp.osdebug(None)
 gc.collect()
 
 ssid = 'Beserrinha AP'
 password = 'SlowDancing123'
-mqtt_server = '18.197.114.189' # HiveMQ Broker
-client_id = ubinascii.hexlify(machine.unique_id())
-
-topic_animation_sub = b'animation_TRUSP_sub'
-
-topic_ldr_pub = b'ldr_TRUSP_pub'
-topic_dht_pub = b'dht_TRUSP_pub'
-topic_notif_pub = b'notif_TRUSP_pub'
 
 station = network.WLAN(network.STA_IF)
 

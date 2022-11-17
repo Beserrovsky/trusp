@@ -12,3 +12,6 @@ ampy -b 115200 -p /dev/ttyUSB0 put boot.py
 
 echo uploading main.py...
 ampy -b 115200 -p /dev/ttyUSB0 put main.py
+
+echo listing device
+ampy -b 115200 -p /dev/ttyUSB0 ls

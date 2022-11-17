@@ -1,4 +1,4 @@
-from routines import tick
+import routines
 from components import *
 from animations import *
 
@@ -12,6 +12,6 @@ def main():
     dht_measure(True)
     light_read(True)
     update_itn()
-    # tick() # MQTT UPDATES
+    # routines.tick() # MQTT UPDATES
 
 main()

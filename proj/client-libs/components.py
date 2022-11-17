@@ -61,6 +61,7 @@ def dht_measure(verbose = False):
     print(temp)
     print("Umidade: ")
     print(hum)
+  return temp, hum
 
 def light_read(verbose = False):
   global lig
@@ -68,9 +69,10 @@ def light_read(verbose = False):
   if (verbose):
     print("Luminosidade: ")
     print(lig)
+  return lig
 
 def update_itn():
-  global itn, lig
+  global lig, itn
   if (lig < 10000):
     itn = 1
   elif (lig < 50000):
