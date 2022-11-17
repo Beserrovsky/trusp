@@ -1,0 +1,19 @@
+{
+  "name": "sem-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Felipe Beserra",
+  "license": "ISC",
+  "engines": {
+    "node": ">=18.12.1"
+  },
+  "dependencies": {
+    "async-mqtt": "^2.6.3",
+    "mongodb": "^4.12.0"
+  }
+}
