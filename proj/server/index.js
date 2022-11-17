@@ -13,7 +13,7 @@ const db_uri =
 const mqtt_uri = 
   'mqtt://broker.hivemq.com';
 
-const SUBS = {'TRUSP-itn': {qos: 0}, 'TRUSP-dht': {qos: 1}};
+const SUBS = {'TRUSP-itn': {qos: 0}, 'TRUSP-temp': {qos: 0}, 'TRUSP-hum': {qos: 0}};
 
 async function db_conn() {
   try {
@@ -44,23 +44,44 @@ async function handleMsg(topic, msg, dbo) {
 
   console.log(`Message received on "${topic}": ${msg.toString()}`);
 
+  let doc;
+
   // Save to Database
   switch(topic) {
     case 'TRUSP-itn':
-      const itn = dbo.collection('itn');  
-    
-      const doc = {
+      doc = {
         itensity: Number(msg),
-        timestamp: Date. now()
-      }  
+        timestamp: Date.now()
+      }
 
-      const result = await itn.insertOne(doc);
-      console.log(
-        `A itn document was inserted with the _id: ${result.insertedId}`,
-      );
+      await saveDoc(doc, 'itn', dbo);
+      break;
+    case 'TRUSP-temp':
+      doc = {
+        temperature: Number(msg),
+        timestamp: Date.now()
+      }
+
+      await saveDoc(doc, 'temp', dbo);
+      break;
+    case 'TRUSP-hum':
+      doc = {
+        humidity: Number(msg),
+        timestamp: Date.now()
+      }
+
+      await saveDoc(doc, 'hum', dbo);
       break;
   }
 
+}
+
+const saveDoc = async (doc, collection, dbo) => {
+  let col = dbo.collection(collection);
+  const result = await col.insertOne(doc);
+  console.log(
+    `A ${collection} document was inserted with the _id: ${result.insertedId}`,
+  );
 }
 
 const db_client = new MongoClient(db_uri);
