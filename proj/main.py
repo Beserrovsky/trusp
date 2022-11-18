@@ -53,7 +53,7 @@ def start():
   global client, WRN_pub, client_id
   try:
     client = connect_and_subscribe()
-    client.publish(WRN_PUB, f'{str(client_id)} is up!')
+    client.publish(WRN_PUB, f'{str(client_id.decode('utf8', 'strict'))} is up!')
   except OSError as e:
     print(e)
     restart_and_reconnect()
