@@ -4,7 +4,9 @@
 - [x] Adicionar leitor de luminosidade e implementar código
 - [x] Timeout credentials
 - [ ] Time callback tf
-- [ ] Fazer backend server
+- [ ] Better client code
+- [x] Fazer backend server
   - [ ] API
-  - [ ] Banco de dados
-  - [ ] Hosting
+  - [x] Banco de dados
+  - [x] Hosting
+  - [ ] Dockerize
