@@ -79,7 +79,7 @@ async function handleMsg(topic, msg, dbo) {
 
       doc = {
         client_id: msg.client_id,
-        status: 'Is Up',
+        status: msg.status,
         timestamp: Date.now()
       }
 
