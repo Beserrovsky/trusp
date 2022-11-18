@@ -7,12 +7,15 @@ const WRN_TOPIC = 'TRUSP_db';
 // Database Name
 const DB_NAME = 'TRUSP';
 
+// Database URI
 const db_uri =
-  'mongodb://localhost:27017/' + DB_NAME;
+  'mongodb://127.0.0.1:27017/' + DB_NAME;
 
+// Broker URI
 const mqtt_uri = 
   'mqtt://broker.hivemq.com';
 
+// Subscriptions
 const SUBS = {'TRUSP_ldr': {qos: 0}, 'TRUSP_dht': {qos: 0}, 'TRUSP_client': {qos: 0}};
 
 async function db_conn() {
@@ -44,49 +47,13 @@ async function handleMsg(topic, msg, dbo) {
 
   console.log(`Message received on "${topic}": ${msg.toString()}`);
 
-  let doc;
-
-  // Save to Database
-  switch(topic) {
-    case 'TRUSP_ldr':
-
-      msg = JSON.parse(msg);
-
-      doc = {
-        client_id: msg.client_id,
-        itensity: msg.ldr,
-        timestamp: Date.now()
-      }
-
-      await saveDoc(doc, 'ldr', dbo);
-      break;
-    case 'TRUSP_dht':
-
-      msg = JSON.parse(msg);
-
-      doc = {
-        client_id: msg.client_id,
-        temperature: msg.temp,
-        humidity: msg.hum,
-        timestamp: Date.now()
-      }
-
-      await saveDoc(doc, 'dht', dbo);
-      break;
-    case 'TRUSP_client':
-
-      msg = JSON.parse(msg);
-
-      doc = {
-        client_id: msg.client_id,
-        status: msg.status,
-        timestamp: Date.now()
-      }
-
-      await saveDoc(doc, 'hum', dbo);
-      break;
+  try {
+    let doc = JSON.parse(msg);
+    doc.timestamp = Date.now();
+    await saveDoc(doc, topic, dbo);
+  } catch (e) {
+    return console.error(e);
   }
-
 }
 
 const saveDoc = async (doc, collection, dbo) => {
