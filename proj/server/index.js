@@ -54,7 +54,7 @@ async function handleMsg(topic, msg, dbo) {
 
       doc = {
         client_id: msg.client_id,
-        itensity: msg.itn,
+        itensity: msg.ldr,
         timestamp: Date.now()
       }
 
@@ -65,6 +65,7 @@ async function handleMsg(topic, msg, dbo) {
       msg = JSON.parse(msg);
 
       doc = {
+        client_id: msg.client_id,
         temperature: msg.temp,
         humidity: msg.hum,
         timestamp: Date.now()
