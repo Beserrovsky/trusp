@@ -1,4 +1,4 @@
-import machine, dht
+import machine, dht, time
 
 ## ! Constraints ! ####################
 

@@ -1,5 +1,5 @@
 # Default libs
-import time, machine, micropython, network, esp, gc, dht
+import time, machine, micropython, network, esp, gc, dht, ubinascii, ujson
 
 # Mqtt lib
 from umqttsimple import MQTTClient
@@ -14,8 +14,8 @@ CONN_TIMEOUT = 10
 esp.osdebug(None)
 gc.collect()
 
-ssid = 'Beserrinha AP'
-password = 'SlowDancing123'
+ssid = 'P2Apto09'
+password = '19988663606'
 
 station = network.WLAN(network.STA_IF)
 
