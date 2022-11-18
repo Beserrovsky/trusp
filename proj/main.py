@@ -53,7 +53,13 @@ def start():
   global client, WRN_pub, client_id
   try:
     client = connect_and_subscribe()
-    client.publish(WRN_PUB, f'{str(client_id.decode('utf8', 'strict'))} is up!')
+
+    wrnD = {
+      'client_id': str(client_id.decode('utf8', 'strict')),
+      'status': True
+    }
+
+    client.publish(WRN_PUB, str(ujson.dumps(wrnD)))
   except OSError as e:
     print(e)
     restart_and_reconnect()
@@ -72,12 +78,12 @@ def update(ldr, temp, hum):
   global client_id
 
   ldrD = {
-    'client_id': client_id,
+    'client_id': str(client_id.decode('utf8', 'strict')),
     'ldr': ldr
   }
 
   dhtD = {
-    'client_id': client_id,
+    'client_id': str(client_id.decode('utf8', 'strict')),
     'temp': temp,
     'hum': hum
   }
