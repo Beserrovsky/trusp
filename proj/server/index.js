@@ -2,7 +2,7 @@ const { MongoClient } = require('mongodb');
 const mqtt = require('async-mqtt');
 
 // Topic for db warnings
-const WRN_TOPIC = 'TRUSP-db';
+const WRN_TOPIC = 'TRUSP_db';
 
 // Database Name
 const DB_NAME = 'TRUSP';
@@ -13,7 +13,7 @@ const db_uri =
 const mqtt_uri = 
   'mqtt://broker.hivemq.com';
 
-const SUBS = {'TRUSP-itn': {qos: 0}, 'TRUSP-temp': {qos: 0}, 'TRUSP-hum': {qos: 0}};
+const SUBS = {'TRUSP_ldr': {qos: 0}, 'TRUSP_dht': {qos: 0}, 'TRUSP_client': {qos: 0}};
 
 async function db_conn() {
   try {
@@ -48,25 +48,37 @@ async function handleMsg(topic, msg, dbo) {
 
   // Save to Database
   switch(topic) {
-    case 'TRUSP-itn':
+    case 'TRUSP_ldr':
+
+      msg = JSON.parse(msg);
+
       doc = {
-        itensity: Number(msg),
+        client_id: msg.client_id,
+        itensity: msg.itn,
         timestamp: Date.now()
       }
 
-      await saveDoc(doc, 'itn', dbo);
+      await saveDoc(doc, 'ldr', dbo);
       break;
-    case 'TRUSP-temp':
+    case 'TRUSP_dht':
+
+      msg = JSON.parse(msg);
+
       doc = {
-        temperature: Number(msg),
+        temperature: msg.temp,
+        humidity: msg.hum,
         timestamp: Date.now()
       }
 
-      await saveDoc(doc, 'temp', dbo);
+      await saveDoc(doc, 'dht', dbo);
       break;
-    case 'TRUSP-hum':
+    case 'TRUSP_client':
+
+      msg = JSON.parse(msg);
+
       doc = {
-        humidity: Number(msg),
+        client_id: msg.client_id,
+        status: 'Is Up',
         timestamp: Date.now()
       }
 
